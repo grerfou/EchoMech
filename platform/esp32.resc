@@ -1,0 +1,17 @@
+# EchoMesh - Script de plateforme Renode pour ESP32
+# Étape 0.2 : Simulation FreeRTOS sans hardware physique
+
+# Définir la machine
+mach create "esp32"
+
+# Charger la plateforme ESP32
+machine LoadPlatformDescription @platforms/boards/esp32-wroom.repl
+
+# Configurer l'UART (redirection vers fichier + terminal)
+showAnalyzer sysbus.uart0
+
+# Charger le firmware (chemin relatif au projet)
+sysbus LoadELF $CWD/../build/hello_world.elf
+
+# Démarrer la simulation
+start

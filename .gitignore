@@ -1,0 +1,16 @@
+# Roadmap (fichier personnel, pas du code)
+DevRoadmap.md
+
+# Build ESP-IDF
+build/
+sdkconfig
+sdkconfig.old
+
+# Fichiers Renode temporaires
+*.log
+*.resc.bak
+
+# Editeur
+.vscode/
+*.swp
+*~
