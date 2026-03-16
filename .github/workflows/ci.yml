@@ -97,3 +97,16 @@ jobs:
           esp_idf_version: v5.2.3
           target: esp32s3
           path: 07_ntp_sync
+  
+  build-08:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build 08_mqtt_local
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.3
+          target: esp32s3
+          path: 08_mqtt_local
