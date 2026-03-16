@@ -136,3 +136,16 @@ jobs:
           esp_idf_version: v5.2.3
           target: esp32s3
           path: 10_mqtt_reconnect
+
+  build-11:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build 11_hivemq_cloud
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.3
+          target: esp32s3
+          path: 11_hivemq_cloud
