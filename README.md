@@ -2,6 +2,8 @@
 
 > *Capteurs qui parlent — ESP32-S3, FreeRTOS, MQTT, IoT de bout en bout.*
 
+[![Demo](https://img.shields.io/badge/▶_Démo-Vimeo-1ab7ea?style=for-the-badge&logo=vimeo)](https://vimeo.com/1174806072)
+
 EchoMesh est un système IoT complet développé sur **ESP32-S3**, démontrant une maîtrise de la chaîne complète embarquée : firmware temps réel, connectivité sécurisée, pipeline de données et dashboard de visualisation.
 
 ---
