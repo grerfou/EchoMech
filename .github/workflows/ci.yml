@@ -23,6 +23,8 @@ jobs:
           echo 'CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"' >> sdkconfig
           echo 'CONFIG_PARTITION_TABLE_OFFSET=0x8000' >> sdkconfig
           echo 'CONFIG_PARTITION_TABLE_MD5=y' >> sdkconfig
+          echo 'CONFIG_ESPTOOLPY_FLASHSIZE_32MB=y' >> sdkconfig
+          echo 'CONFIG_ESPTOOLPY_FLASHSIZE="32MB"' >> sdkconfig
           sed -i 's|CONFIG_WIFI_SSID=""|CONFIG_WIFI_SSID="${{ secrets.WIFI_SSID }}"|' sdkconfig
           sed -i 's|CONFIG_WIFI_PASSWORD=""|CONFIG_WIFI_PASSWORD="${{ secrets.WIFI_PASSWORD }}"|' sdkconfig
           sed -i 's|CONFIG_MQTT_BROKER_URL="placeholder.hivemq.cloud"|CONFIG_MQTT_BROKER_URL="${{ secrets.MQTT_BROKER_URL }}"|' sdkconfig
