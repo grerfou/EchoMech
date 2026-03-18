@@ -1,14 +1,23 @@
 # Roadmap (fichier personnel, pas du code)
 DevRoadmap.md
 
+# Projets intermédiaires — gardés localement mais pas dans git
+01_freertos_blink/
+02_task_architecture/
+03_watchdog/
+04_sensor_sim/
+05_sensor_task/
+06_wifi_connect/
+07_ntp_sync/
+08_mqtt_local/
+09_json_payload/
+10_mqtt_reconnect/
+11_hivemq_cloud/
+13_deep_sleep/
+
 # Build ESP-IDF
 build/
-sdkconfig
 sdkconfig.old
-
-# Fichiers Renode temporaires
-*.log
-*.resc.bak
 
 # Editeur
 .vscode/
