@@ -24,3 +24,4 @@ sdkconfig.old
 .vscode/
 *.swp
 *~
+15_mqtt_ota/sdkconfig
