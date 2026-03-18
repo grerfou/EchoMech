@@ -162,3 +162,16 @@ jobs:
           esp_idf_version: v5.2.3
           target: esp32s3
           path: 13_deep_sleep
+
+  build-15:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build 15_mqtt_ota
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.3
+          target: esp32s3
+          path: 15_mqtt_ota  
