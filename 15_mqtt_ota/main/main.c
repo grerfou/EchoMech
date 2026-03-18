@@ -2,6 +2,7 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/event_groups.h"
 #include "esp_log.h"
 #include "esp_mac.h"
 #include "esp_sleep.h"
@@ -21,27 +22,26 @@ RTC_DATA_ATTR static uint32_t s_boot_count = 0;
 /* ------------------------------------------------------------------ */
 /*  Callback OTA — appelé depuis le handler MQTT                       */
 /* ------------------------------------------------------------------ */
-static volatile bool s_ota_requested = false;
-static char s_ota_url[256]     = {0};
-static char s_ota_version[32]  = {0};
-static char s_ota_sha256[65]   = {0};
+#define OTA_TRIGGER_BIT   BIT0
+
+static EventGroupHandle_t s_ota_event_group = NULL;
+static char s_ota_url[256]    = {0};
+static char s_ota_version[32] = {0};
+static char s_ota_sha256[65]  = {0};
 
 static void on_ota_trigger(const char *url,
                             const char *version,
                             const char *sha256)
 {
-    ESP_LOGI(TAG, "=== EchoMesh v1.1 - OTA Test !!!!!!!!!!!!!!!!!!!!!! ===");
     ESP_LOGI(TAG, "OTA trigger recu !");
     ESP_LOGI(TAG, "  URL     : %s", url);
     ESP_LOGI(TAG, "  Version : %s", version ? version : "N/A");
 
-    strncpy(s_ota_url,     url,     sizeof(s_ota_url) - 1);
-    strncpy(s_ota_version, version ? version : "",
-            sizeof(s_ota_version) - 1);
-    strncpy(s_ota_sha256,  sha256  ? sha256  : "",
-            sizeof(s_ota_sha256) - 1);
+    strncpy(s_ota_url,     url,              sizeof(s_ota_url) - 1);
+    strncpy(s_ota_version, version ? version : "", sizeof(s_ota_version) - 1);
+    strncpy(s_ota_sha256,  sha256  ? sha256  : "", sizeof(s_ota_sha256) - 1);
 
-    s_ota_requested = true;
+    xEventGroupSetBits(s_ota_event_group, OTA_TRIGGER_BIT);
 }
 
 /* ------------------------------------------------------------------ */
@@ -83,6 +83,9 @@ void app_main(void)
         ESP_LOGI(TAG, "=== Premier démarrage #%lu ===", s_boot_count);
     }
 
+    /* EventGroup OTA */
+    s_ota_event_group = xEventGroupCreate();
+
     /* Device ID */
     uint8_t mac[6];
     char device_id[20];
@@ -94,7 +97,6 @@ void app_main(void)
     ESP_ERROR_CHECK(sensor_sim_init());
     sensor_data_t data;
     sensor_sim_read(&data);
-
     ESP_LOGI(TAG, "temp=%.2f°C | hum=%.1f%% | pres=%.1f hPa | lux=%.0f lx",
              data.temp, data.humidity, data.pressure, data.lux);
 
@@ -105,7 +107,7 @@ void app_main(void)
         goto sleep;
     }
 
-    /* Firmware valide - WiFi OK, annulation rollback automatique */
+    /* Firmware valide — WiFi OK, annulation rollback automatique */
     esp_ota_mark_app_valid_cancel_rollback();
 
     ntp_manager_init();
@@ -136,16 +138,18 @@ void app_main(void)
         mqtt_manager_publish(status_topic, "{\"status\":\"idle\"}", 0);
     }
 
-    /* Attente 3s pour recevoir éventuel message OTA */
+    /* Attente 3s pour recevoir éventuel message OTA — EventGroup */
     ESP_LOGI(TAG, "Attente message OTA (3s)...");
-    for (int i = 0; i < 30 && !s_ota_requested; i++) {
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+    EventBits_t bits = xEventGroupWaitBits(
+        s_ota_event_group,
+        OTA_TRIGGER_BIT,
+        pdFALSE,
+        pdFALSE,
+        pdMS_TO_TICKS(3000));
 
-    if (s_ota_requested) {
+    if (bits & OTA_TRIGGER_BIT) {
         ESP_LOGI(TAG, "OTA demarre !");
 
-        /* Publish statut */
         char status_topic[64];
         snprintf(status_topic, sizeof(status_topic),
                  "device/%s/ota/status", device_id);
@@ -175,6 +179,7 @@ void app_main(void)
     }
 
 sleep:
+    vEventGroupDelete(s_ota_event_group);
     ESP_LOGI(TAG, "Deep sleep %d secondes...", CONFIG_SLEEP_DURATION_SEC);
     esp_deep_sleep(CONFIG_SLEEP_DURATION_SEC * 1000000ULL);
 }
