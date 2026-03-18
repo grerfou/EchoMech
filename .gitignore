@@ -2,6 +2,7 @@
 DevRoadmap.md
 
 # Projets intermédiaires — gardés localement mais pas dans git
+00_mqtt_broker/
 01_freertos_blink/
 02_task_architecture/
 03_watchdog/
