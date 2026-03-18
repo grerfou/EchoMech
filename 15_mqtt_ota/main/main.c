@@ -6,6 +6,7 @@
 #include "esp_mac.h"
 #include "esp_sleep.h"
 #include "esp_timer.h"
+#include "esp_ota_ops.h"
 #include "cJSON.h"
 #include "wifi_manager.h"
 #include "ntp_manager.h"
@@ -103,6 +104,9 @@ void app_main(void)
         ESP_LOGE(TAG, "Wi-Fi KO");
         goto sleep;
     }
+
+    /* Firmware valide - WiFi OK, annulation rollback automatique */
+    esp_ota_mark_app_valid_cancel_rollback();
 
     ntp_manager_init();
 
