@@ -13,6 +13,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Generate sdkconfig from secrets
+        working-directory: 15_mqtt_ota
+        run: |
+          cp sdkconfig.defaults sdkconfig
+          echo 'CONFIG_PARTITION_TABLE_CUSTOM=y' >> sdkconfig
+          echo 'CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"' >> sdkconfig
+          echo 'CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"' >> sdkconfig
+          echo 'CONFIG_PARTITION_TABLE_OFFSET=0x8000' >> sdkconfig
+          echo 'CONFIG_PARTITION_TABLE_MD5=y' >> sdkconfig
+          sed -i 's|CONFIG_WIFI_SSID=""|CONFIG_WIFI_SSID="${{ secrets.WIFI_SSID }}"|' sdkconfig
+          sed -i 's|CONFIG_WIFI_PASSWORD=""|CONFIG_WIFI_PASSWORD="${{ secrets.WIFI_PASSWORD }}"|' sdkconfig
+          sed -i 's|CONFIG_MQTT_BROKER_URL="placeholder.hivemq.cloud"|CONFIG_MQTT_BROKER_URL="${{ secrets.MQTT_BROKER_URL }}"|' sdkconfig
+          sed -i 's|CONFIG_MQTT_USERNAME=""|CONFIG_MQTT_USERNAME="${{ secrets.MQTT_USERNAME }}"|' sdkconfig
+          sed -i 's|CONFIG_MQTT_PASSWORD=""|CONFIG_MQTT_PASSWORD="${{ secrets.MQTT_PASSWORD }}"|' sdkconfig
+
       - name: Build 15_mqtt_ota
         uses: espressif/esp-idf-ci-action@v1
         with:
