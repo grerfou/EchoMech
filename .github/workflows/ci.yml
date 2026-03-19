@@ -15,7 +15,7 @@ jobs:
           submodules: recursive
 
       - name: Generate sdkconfig from secrets
-        working-directory: 15_mqtt_ota
+        working-directory: firmware
         run: |
           cp sdkconfig.defaults sdkconfig
           echo 'CONFIG_PARTITION_TABLE_CUSTOM=y' >> sdkconfig
@@ -36,4 +36,4 @@ jobs:
         with:
           esp_idf_version: v5.2.3
           target: esp32s3
-          path: 15_mqtt_ota
+          path: firmware
