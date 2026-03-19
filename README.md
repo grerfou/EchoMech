@@ -79,7 +79,7 @@ cd EchoMesh
 ### 2. Configurer le firmware
 ```bash
 get_idf
-cd 15_mqtt_ota
+cd firmware
 idf.py set-target esp32s3
 idf.py menuconfig
 ```
@@ -123,7 +123,7 @@ Publier sur HiveMQ Cloud via le Web Client :
 ## Structure du projet
 ```
 EchoMesh/
-├── 15_mqtt_ota/              # Firmware final — Deep Sleep + MQTT + OTA
+├── firmware/                 # Firmware final — Deep Sleep + MQTT + OTA
 │   ├── main/
 │   │   ├── main.c            # app_main — séquence réveil → mesure → publish → sleep
 │   │   ├── wifi_manager.c    # Wi-Fi STA + reconnexion backoff exponentiel
