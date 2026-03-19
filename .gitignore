@@ -15,6 +15,7 @@ DevRoadmap.md
 10_mqtt_reconnect/
 11_hivemq_cloud/
 13_deep_sleep/
+15_mqtt_ota/
 
 # Build ESP-IDF
 build/
