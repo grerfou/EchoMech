@@ -1,0 +1,52 @@
+menu "EchoMesh Configuration"
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID du reseau Wi-Fi.
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default "mypassword"
+        help
+            Mot de passe du reseau Wi-Fi.
+
+    config WIFI_MAX_RETRY
+        int "Max reconnexion attempts"
+        default 10
+        help
+            Nombre max de tentatives avant erreur fatale.
+
+    config MQTT_BROKER_URL
+        string "HiveMQ Cloud URL"
+        default "f14a117fb9474a3a8d1ef491a81347ef.s1.eu.hivemq.cloud"
+        help
+            URL du broker HiveMQ Cloud.
+
+    config MQTT_BROKER_PORT
+        int "MQTT Broker Port"
+        default 8883
+        help
+            Port TLS du broker.
+
+    config MQTT_USERNAME
+        string "MQTT Username"
+        default ""
+        help
+            Username HiveMQ Cloud.
+
+    config MQTT_PASSWORD
+        string "MQTT Password"
+        default ""
+        help
+            Password HiveMQ Cloud.
+
+    config SLEEP_DURATION_SEC
+        int "Deep sleep duration (seconds)"
+        default 10
+        range 5 3600
+        help
+            Duree du deep sleep entre deux mesures.
+
+endmenu
